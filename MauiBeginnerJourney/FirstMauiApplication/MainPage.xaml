@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FirstMauiApplication.MainPage">
+             x:Class="FirstMauiApplication.MainPage"
+             xmlns:viewmodel="clr-namespace:FirstMauiApplication.ViewModels"
+             x:DataType="viewmodel:MainViewModel">
     <!-- A grid comprises of rows and columns. -->
 
     <!-- The first row has been set to 100 pixels that adjust according to resolution. 
@@ -22,41 +24,37 @@
         <!-- The image will span across both columns when Grid.ColumnSpan is set to 2. -->
         <Image 
             Grid.ColumnSpan="2"
-            Source="./microsoft_todo.png">
+            Source="./microsoft_todo.png"
+            BackgroundColor="Transparent">
         </Image> <!-- It is already on the first row at index zero, hence no need to define Grid.Row="0". -->
         
         <!-- An Entry is a text entry field. -->
         <Entry 
             Placeholder="Enter task" 
-            Grid.Row="1"/> <!-- The default Grid.Row value is zero. -->
+            Grid.Row="1"
+            Text="{Binding Text}"/> <!-- The default Grid.Row value is zero. -->
 
         <Button
             Text="Add"
+            Command="{Binding AddCommand}"
             Grid.Row="1"
             Grid.Column="1"/>
         
         <!-- CollectionView is a way to hold a list of items. -->
         <CollectionView 
             Grid.Row="2" 
-            Grid.ColumnSpan="2">
-            <CollectionView.ItemsSource>
-                <!-- Fill the item source with an array created within XAML. -->
-                
-                <!-- Create a XAML array of strings. -->
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Apples</x:String>
-                    <x:String>Bananas</x:String>
-                    <x:String>Oranges</x:String>
-                </x:Array>
-            </CollectionView.ItemsSource>
+            Grid.ColumnSpan="2"
+            ItemsSource="{Binding Items}">
             <CollectionView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="{x:Type x:String}">
                     <SwipeView>
                         <SwipeView.RightItems>
                             <SwipeItems>
                                 <SwipeItem
                                     Text="Delete"
-                                    BackgroundColor="Red"></SwipeItem>
+                                    BackgroundColor="Red"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=DeleteCommand}"
+                                    CommandParameter="{Binding .}"></SwipeItem>
                             </SwipeItems>
                         </SwipeView.RightItems>
                         <Grid Padding="0,5">
