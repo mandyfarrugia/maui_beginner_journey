@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace FirstMauiApplication.ViewModels
 {
@@ -47,6 +46,12 @@ namespace FirstMauiApplication.ViewModels
         {
             if(this.Items.Contains(s))
                 this.Items.Remove(s);
+        }
+
+        [RelayCommand]
+        async Task Tap(string s)
+        {
+            await Shell.Current.GoToAsync($"{nameof(DetailPage)}?Text={s}");
         }
     }
 }
